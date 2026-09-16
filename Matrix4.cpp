@@ -8,7 +8,7 @@
 
 #include "Main.h"
 #include "Maths.h"
-#include "tier0/dbg.h"
+#include "dbg.h"
 
 #ifdef SIMD_ENABLED
 #ifdef PLATFORM_PS3

@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include "tier0/platform.h"
+#include "platform.h"
 #include <math.h>
 #include "Vector2.h"
 #include "Vector3.h"
