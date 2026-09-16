@@ -9,7 +9,7 @@
 #include "Main.h"
 #include "Maths.h"
 #include "Vector2.h"
-#include "tier0/dbg.h"
+#include "dbg.h"
 
 CVector2::CVector2() : m_X(0.0f), m_Y(0.0f)
 {
