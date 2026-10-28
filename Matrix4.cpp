@@ -1,6 +1,6 @@
 //===----------------------------------------------------------------------===//
 //
-// Part of the mathsfurry, under the MIT License.
+// Part of the mathsfury, under the MIT License.
 // See LICENSE for license information.
 // SPDX-License-Identifier: MIT
 //
@@ -70,10 +70,10 @@ CMatrix4 CMatrix4::operator*(const CMatrix4& other) const
 #ifdef SIMD_ENABLED
 #ifdef PLATFORM_PS3
 	vector float zero = { 0.0f, 0.0f, 0.0f, 0.0f };
-	
+
 	vector float col0 = vec_lvlx(0, &m_Data[0]);
 	col0 = vec_or(col0, vec_lvrx(16, &m_Data[0]));
-	
+
 	vector float col1 = vec_lvlx(0, &m_Data[4]);
 	col1 = vec_or(col1, vec_lvrx(16, &m_Data[4]));
 
@@ -101,7 +101,7 @@ CMatrix4 CMatrix4::operator*(const CMatrix4& other) const
 		res = vec_madd(col1, vec_splats(other.m_Data[c * 4 + 1]), res);
 		res = vec_madd(col2, vec_splats(other.m_Data[c * 4 + 2]), res);
 		res = vec_madd(col3, vec_splats(other.m_Data[c * 4 + 3]), res);
-		
+
 		u.v = res;
 		result.m_Data[c * 4 + 0] = u.f[0];
 		result.m_Data[c * 4 + 1] = u.f[1];
@@ -115,7 +115,7 @@ CMatrix4 CMatrix4::operator*(const CMatrix4& other) const
 	simde__m128 col1 = simde_mm_load_ps(&m_Data[4]);
 	simde__m128 col2 = simde_mm_load_ps(&m_Data[8]);
 	simde__m128 col3 = simde_mm_load_ps(&m_Data[12]);
-	
+
 	CMatrix4 result;
 	float32 temp[4];
 	for (int32 c = 0; c < 4; c++)
@@ -317,7 +317,7 @@ CMatrix4 CMatrix4::operator-(const CMatrix4& other) const
 		simde__m128 v2 = simde_mm_load_ps(&other.m_Data[i * 4]);
 		simde_mm_store_ps(&result.m_Data[i * 4], simde_mm_sub_ps(v1, v2));
 	}
-	
+
 	return result;
 #endif // !PLATFORM_PS3
 #else // SIMD_ENABLED
@@ -421,7 +421,7 @@ CVector4 CMatrix4::operator*(const CVector4& v) const
 #ifdef PLATFORM_PS3
 	vector float col0 = vec_lvlx(0, &m_Data[0]);
 	col0 = vec_or(col0, vec_lvrx(16, &m_Data[0]));
-	
+
 	vector float col1 = vec_lvlx(0, &m_Data[4]);
 	col1 = vec_or(col1, vec_lvrx(16, &m_Data[4]));
 
@@ -430,13 +430,13 @@ CVector4 CMatrix4::operator*(const CVector4& v) const
 
 	vector float col3 = vec_lvlx(0, &m_Data[12]);
 	col3 = vec_or(col3, vec_lvrx(16, &m_Data[12]));
-	
+
 	vector float zero = { 0.0f, 0.0f, 0.0f, 0.0f };
 	vector float vx = vec_splats(v.m_X);
 	vector float vy = vec_splats(v.m_Y);
 	vector float vz = vec_splats(v.m_Z);
 	vector float vw = vec_splats(v.m_W);
-	
+
 	vector float res = vec_madd(vx, col0, zero);
 	res = vec_madd(vy, col1, res);
 	res = vec_madd(vz, col2, res);
@@ -456,12 +456,12 @@ CVector4 CMatrix4::operator*(const CVector4& v) const
 	simde__m128 col1 = simde_mm_load_ps(&m_Data[4]);
 	simde__m128 col2 = simde_mm_load_ps(&m_Data[8]);
 	simde__m128 col3 = simde_mm_load_ps(&m_Data[12]);
-	
+
 	simde__m128 vx = simde_mm_set1_ps(v.m_X);
 	simde__m128 vy = simde_mm_set1_ps(v.m_Y);
 	simde__m128 vz = simde_mm_set1_ps(v.m_Z);
 	simde__m128 vw = simde_mm_set1_ps(v.m_W);
-	
+
 	simde__m128 res = simde_mm_add_ps(
 		simde_mm_add_ps(simde_mm_mul_ps(vx, col0), simde_mm_mul_ps(vy, col1)),
 		simde_mm_add_ps(simde_mm_mul_ps(vz, col2), simde_mm_mul_ps(vw, col3)));
@@ -472,10 +472,14 @@ CVector4 CMatrix4::operator*(const CVector4& v) const
 #endif // !PLATFORM_PS3
 #else // SIMD_ENABLED
 	return CVector4(
-		m_Data[0] * v.m_X + m_Data[4] * v.m_Y + m_Data[8] * v.m_Z + m_Data[12] * v.m_W,
-		m_Data[1] * v.m_X + m_Data[5] * v.m_Y + m_Data[9] * v.m_Z + m_Data[13] * v.m_W,
-		m_Data[2] * v.m_X + m_Data[6] * v.m_Y + m_Data[10] * v.m_Z + m_Data[14] * v.m_W,
-		m_Data[3] * v.m_X + m_Data[7] * v.m_Y + m_Data[11] * v.m_Z + m_Data[15] * v.m_W);
+		m_Data[0] * v.m_X + m_Data[4] * v.m_Y +
+			m_Data[8] * v.m_Z + m_Data[12] * v.m_W,
+		m_Data[1] * v.m_X + m_Data[5] * v.m_Y +
+			m_Data[9] * v.m_Z + m_Data[13] * v.m_W,
+		m_Data[2] * v.m_X + m_Data[6] * v.m_Y +
+			m_Data[10] * v.m_Z + m_Data[14] * v.m_W,
+		m_Data[3] * v.m_X + m_Data[7] * v.m_Y +
+			m_Data[11] * v.m_Z + m_Data[15] * v.m_W);
 #endif // !SIMD_ENABLED
 }
 
@@ -484,24 +488,25 @@ CMatrix4 CMatrix4::ToTransformMatrix(
 	const CVector3& scale) const
 {
 	Assert(
-		CMaths::Abs(m_Data[12]) < 0.001f && CMaths::Abs(m_Data[13]) < 0.001f && CMaths::Abs(m_Data[14]) < 0.001f);
+		CMaths::Abs(m_Data[12]) < 0.001f && CMaths::Abs(m_Data[13]) < 0.001f &&
+			CMaths::Abs(m_Data[14]) < 0.001f);
 
 	CMatrix4 result = *this;
 	result.m_Data[0] *= scale.m_X;
 	result.m_Data[1] *= scale.m_X;
 	result.m_Data[2] *= scale.m_X;
-	
+
 	result.m_Data[4] *= scale.m_Y;
 	result.m_Data[5] *= scale.m_Y;
 	result.m_Data[6] *= scale.m_Y;
-	
+
 	result.m_Data[8] *= scale.m_Z;
 	result.m_Data[9] *= scale.m_Z;
 	result.m_Data[10] *= scale.m_Z;
-	
+
 	result.m_Data[12] = position.m_X;
 	result.m_Data[13] = position.m_Y;
 	result.m_Data[14] = position.m_Z;
-	
+
 	return result;
 }

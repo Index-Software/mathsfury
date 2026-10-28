@@ -1,6 +1,6 @@
 //===----------------------------------------------------------------------===//
 //
-// Part of the mathsfurry, under the MIT License.
+// Part of the mathsfury, under the MIT License.
 // See LICENSE for license information.
 // SPDX-License-Identifier: MIT
 //
@@ -26,7 +26,7 @@ public:
 
 	float32& operator[](int32 index);
 	const float32& operator[](int32 index) const;
-	
+
 	CVector4& operator=(const CVector4& other);
 
 	CVector4& operator+=(const CVector4& other);
@@ -46,10 +46,10 @@ public:
 	bool operator==(const CVector4& other) const;
 	bool operator!=(const CVector4& other) const;
 
-	float32 Length() const;
 	float32 LengthSq() const;
-	float32 Distance(const CVector4& other) const;
+	float32 Length() const;
 	float32 DistanceSq(const CVector4& other) const;
+	float32 Distance(const CVector4& other) const;
 };
 
 #endif // VECTOR4_H

@@ -1,6 +1,6 @@
 //===----------------------------------------------------------------------===//
 //
-// Part of the mathsfurry, under the MIT License.
+// Part of the mathsfury, under the MIT License.
 // See LICENSE for license information.
 // SPDX-License-Identifier: MIT
 //
@@ -44,7 +44,7 @@ CVector3& CVector3::operator=(const CVector3& other)
 	m_X = other.m_X;
 	m_Y = other.m_Y;
 	m_Z = other.m_Z;
-	
+
 	return *this;
 }
 
@@ -130,7 +130,7 @@ CVector3 CVector3::operator-(const CVector3& other) const
 #ifdef PLATFORM_PS3
 	vector float v1 = { m_X, m_Y, m_Z, 0.0f };
 	vector float v2 = { other.m_X, other.m_Y, other.m_Z, 0.0f };
-	
+
 	union
 	{
 		vector float v;
@@ -182,7 +182,7 @@ CVector3 CVector3::operator*(float32 scalar) const
 	}
 	u;
 	u.v = vec_madd(v1, vs, zero);
-	
+
 	return CVector3(u.f[0], u.f[1], u.f[2]);
 #endif // PLATFORM_PS3
 #endif // SIMD_ENABLED
@@ -252,13 +252,18 @@ float32 CVector3::LengthXY() const
 	return CMaths::Sqrt(m_X * m_X + m_Y * m_Y);
 }
 
+float32 CVector3::LengthSq() const
+{
+	return m_X * m_X + m_Y * m_Y + m_Z * m_Z;
+}
+
 float32 CVector3::Length() const
 {
 #ifdef SIMD_ENABLED
 #ifdef PLATFORM_PS3
 	vector float zero = { 0.0f, 0.0f, 0.0f, 0.0f };
 	vector float v = { m_X, m_Y, m_Z, 0.0f };
-	
+
 	union
 	{
 		vector float v;
@@ -272,16 +277,6 @@ float32 CVector3::Length() const
 #endif // PLATFORM_PS3
 #endif // SIMD_ENABLED
 	return CMaths::Sqrt(m_X * m_X + m_Y * m_Y + m_Z * m_Z);
-}
-
-float32 CVector3::LengthSq() const
-{
-	return m_X * m_X + m_Y * m_Y + m_Z * m_Z;
-}
-
-float32 CVector3::Distance(const CVector3& other) const
-{
-	return CMaths::Sqrt(DistanceSq(other));
 }
 
 float32 CVector3::DistanceSq(const CVector3& other) const
@@ -309,6 +304,11 @@ float32 CVector3::DistanceSq(const CVector3& other) const
 	float32 dz = m_Z - other.m_Z;
 
 	return dx * dx + dy * dy + dz * dz;
+}
+
+float32 CVector3::Distance(const CVector3& other) const
+{
+	return CMaths::Sqrt(DistanceSq(other));
 }
 
 float32 CVector3::Dot(const CVector3& other) const

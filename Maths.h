@@ -1,6 +1,6 @@
 //===----------------------------------------------------------------------===//
 //
-// Part of the mathsfurry, under the MIT License.
+// Part of the mathsfury, under the MIT License.
 // See LICENSE for license information.
 // SPDX-License-Identifier: MIT
 //

@@ -1,6 +1,6 @@
 //===----------------------------------------------------------------------===//
 //
-// Part of the mathsfurry, under the MIT License.
+// Part of the mathsfury, under the MIT License.
 // See LICENSE for license information.
 // SPDX-License-Identifier: MIT
 //
@@ -135,19 +135,14 @@ bool CVector2::operator!=(const CVector2& other) const
 	return !(*this == other);
 }
 
-float32 CVector2::Length() const
-{
-	return CMaths::Sqrt(LengthSq());
-}
-
 float32 CVector2::LengthSq() const
 {
 	return m_X * m_X + m_Y * m_Y;
 }
 
-float32 CVector2::Distance(const CVector2& other) const
+float32 CVector2::Length() const
 {
-	return CMaths::Sqrt(DistanceSq(other));
+	return CMaths::Sqrt(LengthSq());
 }
 
 float32 CVector2::DistanceSq(const CVector2& other) const
@@ -156,4 +151,9 @@ float32 CVector2::DistanceSq(const CVector2& other) const
 	float32 dy = m_Y - other.m_Y;
 
 	return dx * dx + dy * dy;
+}
+
+float32 CVector2::Distance(const CVector2& other) const
+{
+	return CMaths::Sqrt(DistanceSq(other));
 }
