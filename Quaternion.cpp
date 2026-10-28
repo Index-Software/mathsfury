@@ -1,6 +1,6 @@
 //===----------------------------------------------------------------------===//
 //
-// Part of the mathsfurry, under the MIT License.
+// Part of the mathsfury, under the MIT License.
 // See LICENSE for license information.
 // SPDX-License-Identifier: MIT
 //
@@ -25,9 +25,24 @@ CQuaternion::CQuaternion(
 	float32 x,
 	float32 y,
 	float32 z,
-	float32 w
-) : m_X(x), m_Y(y), m_Z(z), m_W(w)
+	float32 w) : m_X(x), m_Y(y), m_Z(z), m_W(w)
 {
+}
+
+CQuaternion CQuaternion::FromEuler(float32 pitch, float32 yaw, float32 roll)
+{
+	float32 cy = CMaths::Cos(yaw * 0.5f);
+	float32 sy = CMaths::Sin(yaw * 0.5f);
+	float32 cp = CMaths::Cos(pitch * 0.5f);
+	float32 sp = CMaths::Sin(pitch * 0.5f);
+	float32 cr = CMaths::Cos(roll * 0.5f);
+	float32 sr = CMaths::Sin(roll * 0.5f);
+
+	return CQuaternion(
+		sr * cp * cy - cr * sp * sy,
+		cr * sp * cy + sr * cp * sy,
+		cr * cp * sy - sr * sp * cy,
+		cr * cp * cy + sr * sp * sy);
 }
 
 CQuaternion CQuaternion::operator*(const CQuaternion& other) const
@@ -41,9 +56,6 @@ CQuaternion CQuaternion::operator*(const CQuaternion& other) const
 
 CMatrix4 CQuaternion::ToMatrix() const
 {
-	float32 xx, yy, zz;
-	float32 xy, xz, yz, wx, wy, wz;
-
 #ifdef SIMD_ENABLED
 #ifdef PLATFORM_PS3
 	vector float zero = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -57,45 +69,45 @@ CMatrix4 CQuaternion::ToMatrix() const
 	u;
 	u.v = vec_madd(q, q, zero);
 
-	xx = u.f[0];
-	yy = u.f[1];
-	zz = u.f[2];
+	float32 xx = u.f[0];
+	float32 yy = u.f[1];
+	float32 zz = u.f[2];
 
 	vector float vx = vec_splats(m_X);
 	vector float qyzw = { m_Y, m_Z, m_W, 0.0f };
 	u.v = vec_madd(vx, qyzw, zero);
-	xy = u.f[0];
-	xz = u.f[1];
-	wx = u.f[2];
+	float32 xy = u.f[0];
+	float32 xz = u.f[1];
+	float32 wx = u.f[2];
 
 	vector float vy = vec_splats(m_Y);
 	vector float qzw = { m_Z, m_W, 0.0f, 0.0f };
 	u.v = vec_madd(vy, qzw, zero);
-	yz = u.f[0];
-	wy = u.f[1];
+	float32 yz = u.f[0];
+	float32 wy = u.f[1];
 
-	wz = m_W * m_Z;
+	float32 wz = m_W * m_Z;
 #else // PLATFORM_PS3
-	xx = m_X * m_X;
-	yy = m_Y * m_Y;
-	zz = m_Z * m_Z;
-	xy = m_X * m_Y;
-	xz = m_X * m_Z;
-	yz = m_Y * m_Z;
-	wx = m_W * m_X;
-	wy = m_W * m_Y;
-	wz = m_W * m_Z;
+	float32 xx = m_X * m_X;
+	float32 yy = m_Y * m_Y;
+	float32 zz = m_Z * m_Z;
+	float32 xy = m_X * m_Y;
+	float32 xz = m_X * m_Z;
+	float32 yz = m_Y * m_Z;
+	float32 wx = m_W * m_X;
+	float32 wy = m_W * m_Y;
+	float32 wz = m_W * m_Z;
 #endif // !PLATFORM_PS3
 #else // SIMD_ENABLED
-	xx = m_X * m_X;
-	yy = m_Y * m_Y;
-	zz = m_Z * m_Z;
-	xy = m_X * m_Y;
-	xz = m_X * m_Z;
-	yz = m_Y * m_Z;
-	wx = m_W * m_X;
-	wy = m_W * m_Y;
-	wz = m_W * m_Z;
+	float32 xx = m_X * m_X;
+	float32 yy = m_Y * m_Y;
+	float32 zz = m_Z * m_Z;
+	float32 xy = m_X * m_Y;
+	float32 xz = m_X * m_Z;
+	float32 yz = m_Y * m_Z;
+	float32 wx = m_W * m_X;
+	float32 wy = m_W * m_Y;
+	float32 wz = m_W * m_Z;
 #endif // !SIMD_ENABLED
 
 	CMatrix4 result;
@@ -126,9 +138,6 @@ CMatrix4 CQuaternion::ToTransformMatrix(
 	const CVector3& position,
 	const CVector3& scale) const
 {
-	float32 xx, yy, zz;
-	float32 xy, xz, yz, wx, wy, wz;
-
 #ifdef SIMD_ENABLED
 #ifdef PLATFORM_PS3
 	vector float zero = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -142,45 +151,45 @@ CMatrix4 CQuaternion::ToTransformMatrix(
 	u;
 	u.v = vec_madd(q, q, zero);
 
-	xx = u.f[0];
-	yy = u.f[1];
-	zz = u.f[2];
+	float32 xx = u.f[0];
+	float32 yy = u.f[1];
+	float32 zz = u.f[2];
 
 	vector float vx = vec_splats(m_X);
 	vector float qyzw = { m_Y, m_Z, m_W, 0.0f };
 	u.v = vec_madd(vx, qyzw, zero);
-	xy = u.f[0];
-	xz = u.f[1];
-	wx = u.f[2];
+	float32 xy = u.f[0];
+	float32 xz = u.f[1];
+	float32 wx = u.f[2];
 
 	vector float vy = vec_splats(m_Y);
 	vector float qzw = { m_Z, m_W, 0.0f, 0.0f };
 	u.v = vec_madd(vy, qzw, zero);
-	yz = u.f[0];
-	wy = u.f[1];
+	float32 yz = u.f[0];
+	float32 wy = u.f[1];
 
-	wz = m_W * m_Z;
+	float32 wz = m_W * m_Z;
 #else // PLATFORM_PS3
-	xx = m_X * m_X;
-	yy = m_Y * m_Y;
-	zz = m_Z * m_Z;
-	xy = m_X * m_Y;
-	xz = m_X * m_Z;
-	yz = m_Y * m_Z;
-	wx = m_W * m_X;
-	wy = m_W * m_Y;
-	wz = m_W * m_Z;
+	float32 xx = m_X * m_X;
+	float32 yy = m_Y * m_Y;
+	float32 zz = m_Z * m_Z;
+	float32 xy = m_X * m_Y;
+	float32 xz = m_X * m_Z;
+	float32 yz = m_Y * m_Z;
+	float32 wx = m_W * m_X;
+	float32 wy = m_W * m_Y;
+	float32 wz = m_W * m_Z;
 #endif // !PLATFORM_PS3
 #else // SIMD_ENABLED
-	xx = m_X * m_X;
-	yy = m_Y * m_Y;
-	zz = m_Z * m_Z;
-	xy = m_X * m_Y;
-	xz = m_X * m_Z;
-	yz = m_Y * m_Z;
-	wx = m_W * m_X;
-	wy = m_W * m_Y;
-	wz = m_W * m_Z;
+	float32 xx = m_X * m_X;
+	float32 yy = m_Y * m_Y;
+	float32 zz = m_Z * m_Z;
+	float32 xy = m_X * m_Y;
+	float32 xz = m_X * m_Z;
+	float32 yz = m_Y * m_Z;
+	float32 wx = m_W * m_X;
+	float32 wy = m_W * m_Y;
+	float32 wz = m_W * m_Z;
 #endif // !SIMD_ENABLED
 
 	CMatrix4 result;
@@ -205,6 +214,11 @@ CMatrix4 CQuaternion::ToTransformMatrix(
 	result.m_Data[15] = 1.0f;
 
 	return result;
+}
+
+float32 CQuaternion::Length() const
+{
+	return CMaths::Sqrt(m_X * m_X + m_Y * m_Y + m_Z * m_Z + m_W * m_W);
 }
 
 CQuaternion& CQuaternion::Normalise()
@@ -262,25 +276,4 @@ CQuaternion& CQuaternion::Normalise()
 
 	return *this;
 #endif // !SIMD_ENABLED
-}
-
-float32 CQuaternion::Length() const
-{
-	return CMaths::Sqrt(m_X * m_X + m_Y * m_Y + m_Z * m_Z + m_W * m_W);
-}
-
-CQuaternion CQuaternion::FromEuler(float32 pitch, float32 yaw, float32 roll)
-{
-	float32 cy = CMaths::Cos(yaw * 0.5f);
-	float32 sy = CMaths::Sin(yaw * 0.5f);
-	float32 cp = CMaths::Cos(pitch * 0.5f);
-	float32 sp = CMaths::Sin(pitch * 0.5f);
-	float32 cr = CMaths::Cos(roll * 0.5f);
-	float32 sr = CMaths::Sin(roll * 0.5f);
-
-	return CQuaternion(
-		sr * cp * cy - cr * sp * sy,
-		cr * sp * cy + sr * cp * sy,
-		cr * cp * sy - sr * sp * cy,
-		cr * cp * cy + sr * sp * sy);
 }

@@ -1,6 +1,6 @@
 //===----------------------------------------------------------------------===//
 //
-// Part of the mathsfurry, under the MIT License.
+// Part of the mathsfury, under the MIT License.
 // See LICENSE for license information.
 // SPDX-License-Identifier: MIT
 //
@@ -20,7 +20,7 @@ class CMatrix4
 {
 public:
 	ALIGN16 float32 m_Data[16];
-	
+
 	CMatrix4();
 	explicit CMatrix4(float32 diagonal);
 
