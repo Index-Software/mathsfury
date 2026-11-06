@@ -41,6 +41,8 @@ mathsfury is a C++ mathematics library for 3D graphics targeting PlayStation 3 a
 - `static float32 Clamp(float32 value, float32 minVal, float32 maxVal)`
 - `static int32 Clamp(int32 value, int32 minVal, int32 maxVal)`
 - `static uint32 Clamp(uint32 value, uint32 minVal, uint32 maxVal)`
+- `static bool IsPowerOfTwo(uint32 value)`
+- `static uint32 Log2(uint32 value)`
 - `static CVector3 Normalise(const CVector3& v)`
 - `static CVector3 Cross(const CVector3& a, const CVector3& b)`
 - `static float32 Dot(const CVector3& a, const CVector3& b)`
