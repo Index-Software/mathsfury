@@ -117,6 +117,23 @@ public:
 		return Max(minVal, Min(value, maxVal));
 	}
 
+	static INLINE bool IsPowerOfTwo(uint32 value)
+	{
+		return value != 0 && (value & (value - 1)) == 0;
+	}
+
+	static INLINE uint32 Log2(uint32 value)
+	{
+		uint32 result = 0;
+		while (value > 1)
+		{
+			value >>= 1;
+			result++;
+		}
+
+		return result;
+	}
+
 	static CVector3 Normalise(const CVector3& v);
 	static CVector3 Cross(const CVector3& a, const CVector3& b);
 	static float32 Dot(const CVector3& a, const CVector3& b);
